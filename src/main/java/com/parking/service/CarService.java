@@ -14,10 +14,6 @@ public class CarService {
 
     public CarService() {}
 
-    public List<Car> getAllCars(){
-        return new ArrayList<>(carMap.values());
-    }
-
     //AUTÓ HOZZÁADÁSA
     public void addCar(Car newCar){
         if(carMap.containsKey(newCar.getLicensePlate())){
@@ -27,7 +23,27 @@ public class CarService {
     }
     //AUTÓ TÖRLÉSE
     public void deleteCar(String licensePlate){
-        carMap.remove(licensePlate);
+        Car car = carMap.get(licensePlate);
+
+        if(car != null){
+            if(car.isParked()){
+                throw new IllegalArgumentException("Ez az autó nem törölhető, mert éppen parkol!");
+            }
+            carMap.remove(licensePlate);
+        }
+    }
+
+    public List<Car> getAllCars(){
+        List<Car> allCars = new ArrayList<>(carMap.values());
+
+        for(Car car:allCars){
+            car.resetParkingState();
+        }
+        return allCars;
+    }
+
+    public Car getCarByPlate(String licensePlate){
+        return carMap.get(licensePlate);
     }
 
 }
