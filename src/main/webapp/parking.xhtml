@@ -1,0 +1,138 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="jakarta.faces.html"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:f="jakarta.faces.core"
+        xmlns:ui="jakarta.faces.facelets"
+        template="layout.xhtml">
+
+    <ui:define name="content">
+        <f:metadata>
+            <f:viewParam name="plate" value="#{parkingController.selectedLicensePlate}"/>
+            <f:viewAction action="#{parkingController.loadSelectedCar}"/>
+        </f:metadata>
+
+        <div>
+            <h3> A kiválasztott autó rendszáma: #{parkingController.selectedCar.licensePlate}</h3>
+            <h3> A kiválasztott autó márkája: #{parkingController.selectedCar.brand}</h3>
+            <h3> A kiválasztott autó típusa: #{parkingController.selectedCar.type}</h3>
+            <h3> A kiválasztott autó színe: #{parkingController.selectedCar.color}</h3>
+        </div>
+
+
+        <h:form id="parkingForm">
+            <p:growl id="msg" showDetail="true"/>
+            <p:tabView>
+                <p:tab title="A szint">
+
+                    <p:spacer height="20" style="display: block"/>
+
+                    <div class="field">
+                        <p:outputLabel for="startA" value="Parkolás kezdete:" style="margin-right: 10px;"/>
+                        <p:datePicker id="startA"
+                                      value="#{parkingController.startDate}"
+                                      showTime="true"
+                                      showIcon="true"
+                                      pattern="yyyy.MM.dd HH:mm"
+                                      required="true"
+                        />
+                    </div>
+
+                    <p:spacer height="15" style="display: block"/>
+
+                    <div class="field">
+                        <p:outputLabel for="endA" value="Parkolás vége:" style="margin-right: 10px;"/>
+                        <p:datePicker id="endA"
+                                      value="#{parkingController.endDate}"
+                                      showTime="true"
+                                      showIcon="true"
+                                      pattern="yyyy.MM.dd HH:mm"
+                                      required="true"/>
+                    </div>
+                    <p:spacer height="50" style="display: block"/>
+
+                    <p:commandButton value="Parkolás"
+                                     action="#{parkingController.parkCar('A')}"
+                                     update="@form"
+                                     process="@parent"
+                    />
+                </p:tab>
+
+                <p:tab title="B szint">
+
+                    <p:spacer height="20" style="display: block"/>
+
+                    <div class="field">
+                        <p:outputLabel for="startB" value="Parkolás kezdete:" style="margin-right: 10px;"/>
+                        <p:datePicker id="startB"
+                                      value="#{parkingController.startDate}"
+                                      showTime="true"
+                                      showIcon="true"
+                                      pattern="yyyy.MM.dd HH:mm"
+                                      required="true"/>
+                    </div>
+
+                    <p:spacer height="15" style="display: block"/>
+
+                    <div class="field">
+                        <p:outputLabel for="endB" value="Parkolás vége:" style="margin-right: 10px;"/>
+                        <p:datePicker id="endB"
+                                      value="#{parkingController.endDate}"
+                                      showTime="true"
+                                      showIcon="true"
+                                      pattern="yyyy.MM.dd HH:mm"
+                                      required="true"
+
+                        />
+                    </div>
+
+                    <p:spacer height="50" style="display: block"/>
+
+                    <p:commandButton value="Parkolás"
+                                     action="#{parkingController.parkCar('B')}"
+                                     update="@form"
+                                     process="@parent"
+                    />
+                </p:tab>
+
+                <p:tab title="C szint">
+                    <p:spacer height="20" style="display: block"/>
+
+                    <div class="field">
+                        <p:outputLabel for="startC" value="Parkolás kezdete:" style="margin-right: 10px;"/>
+                        <p:datePicker id="startC"
+                                      value="#{parkingController.startDate}"
+                                      showTime="true"
+                                      showIcon="true"
+                                      pattern="yyyy.MM.dd HH:mm"
+                                      required="true"/>
+                    </div>
+
+                    <p:spacer height="15" style="display: block"/>
+
+                    <div class="field">
+                        <p:outputLabel for="endC" value="Parkolás vége:" style="margin-right: 10px;"/>
+                        <p:datePicker id="endC"
+                                      value="#{parkingController.endDate}"
+                                      showTime="true"
+                                      showIcon="true"
+                                      pattern="yyyy.MM.dd HH:mm"
+                                      required="true"/>
+                    </div>
+
+                    <p:spacer height="50" style="display: block"/>
+
+                    <p:commandButton value="Parkolás"
+                                     action="#{parkingController.parkCar('C')}"
+                                     update="@form"
+                                     process="@parent"
+                    />
+                </p:tab>
+            </p:tabView>
+            <p:button value="Vissza az autók listájához"
+                      outcome="cars"
+                      icon="pi pi-arrow-left"
+                      />
+        </h:form>
+    </ui:define>
+</ui:composition>
