@@ -1,0 +1,101 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="jakarta.faces.html"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:f="jakarta.faces.core"
+        xmlns:ui="jakarta.faces.facelets"
+        template="layout.xhtml">
+    <ui:define name="content">
+        <f:metadata>
+            <f:viewAction action="#{carListController.onPageLoad()}"/>
+        </f:metadata>
+
+        <h:form id="carForm">
+            <p:growl id="msg" showDetail="true"/>
+            <p:commandButton
+                    value="Új autó hozzáadása"
+                    actionListener="#{carListController.initNewCar()}"
+                    update=":dialogForm:carDialog"
+                    oncomplete="PF('carDialogWidget').show()"
+            />
+
+
+            <p:dataTable id="carTable" var="car" value="#{carListController.cars}">
+                <p:column headerText="Rendszám">
+                    <h:outputText value="#{car.licensePlate}"/>
+                </p:column>
+
+                <p:column headerText="Márka">
+                    <h:outputText value="#{car.brand}"/>
+                </p:column>
+
+                <p:column headerText="Típus">
+                    <h:outputText value="#{car.type}"/>
+                </p:column>
+
+                <p:column headerText="Szín">
+                    <h:outputText value="#{car.color}"/>
+                </p:column>
+
+                <p:column headerText="Hol parkol?">
+                    <h:outputText value="#{car.parkingLotName}"/>
+                    <h:outputText value="Szabad" rendered="#{car.parkingLotName == null}"/>
+                </p:column>
+
+                <p:column>
+                    <!-- TORLES -->
+                    <p:commandButton
+                            icon="pi pi-trash"
+                            value="Törlés"
+                            styleClass="ui-button-danger"
+                            actionListener="#{carListController.deleteCar(car)}"
+                            disabled="#{car.parked}"
+                            update="carForm:carTable"
+                            process="@this"
+                    />
+                    <!-- PARKOLAS -->
+                    <p:column>
+                        <p:button outcome="parking" value="Parkolás " icon="pi pi-car">
+                            <f:param name="plate" value="#{car.licensePlate}"/>
+                        </p:button>
+                    </p:column>
+                </p:column>
+
+            </p:dataTable>
+
+
+        </h:form>
+
+        <h:form id="dialogForm">
+            <p:dialog header="Új autó felvétele" widgetVar="carDialogWidget" modal="true">
+
+                <p:panelGrid columns="2" id="carDialog">
+
+                    <p:outputLabel for="lpInput" value="Rendszám:"/>
+                    <p:inputText id="lpInput" value="#{carListController.newCar.licensePlate}" required="true"/>
+
+                    <p:outputLabel for="brandInput" value="Márka:"/>
+                    <p:inputText id="brandInput" value="#{carListController.newCar.brand}"/>
+
+                    <p:outputLabel for="typeInput" value="Típus:"/>
+                    <p:inputText id="typeInput" value="#{carListController.newCar.type}"/>
+
+                    <p:outputLabel for="colorInput" value="Szín:"/>
+                    <p:inputText id="colorInput" value="#{carListController.newCar.color}"/>
+
+                </p:panelGrid>
+
+                <p:commandButton
+                        value="Mentés"
+                        actionListener="#{carListController.saveCar()}"
+                        update=":carForm:carTable :carForm:msg"
+                        process="@form"
+                        oncomplete="if(!args.validationFailed) PF('carDialogWidget').hide()"
+
+                />
+            </p:dialog>
+        </h:form>
+
+
+    </ui:define>
+</ui:composition>
